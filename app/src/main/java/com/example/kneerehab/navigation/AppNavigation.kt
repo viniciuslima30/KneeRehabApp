@@ -20,6 +20,7 @@ import com.example.kneerehab.screens.InjuriesScreen
 import com.example.kneerehab.screens.InjuryDetailScreen
 import com.example.kneerehab.screens.ExercisesScreen
 import com.example.kneerehab.screens.FavoritesScreen
+import com.example.kneerehab.screens.EducationalContentScreen
 
 @Composable
 fun AppNavigation() {
@@ -28,7 +29,6 @@ fun AppNavigation() {
 
     val context = LocalContext.current
 
-    // Banco de dados SQLite
     val database = remember {
         AppDatabase.getDatabase(context)
     }
@@ -37,7 +37,6 @@ fun AppNavigation() {
         database.favoriteDao()
     }
 
-    // Preferências do usuário com DataStore
     val userPreferences = remember {
         UserPreferences(context)
     }
@@ -56,7 +55,19 @@ fun AppNavigation() {
                 onFavoritesClick = {
                     navController.navigate("favorites")
                 },
+                onEducationalClick = {
+                    navController.navigate("educational")
+                },
                 userPreferences = userPreferences
+            )
+        }
+
+        // Conteúdos educativos
+        composable("educational") {
+            EducationalContentScreen(
+                onBackClick = {
+                    navController.popBackStack()
+                }
             )
         }
 
@@ -112,7 +123,7 @@ fun AppNavigation() {
             }
         }
 
-        // Exercícios relacionados à lesão
+        // Exercícios relacionados
         composable(
             route = "exercises/{injuryId}",
             arguments = listOf(
