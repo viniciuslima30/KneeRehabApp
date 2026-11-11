@@ -12,7 +12,6 @@ import androidx.compose.ui.unit.dp
 import com.example.kneerehab.data.api.Post
 import com.example.kneerehab.data.api.RetrofitClient
 
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun EducationalContentScreen(
     onBackClick: () -> Unit
@@ -42,28 +41,34 @@ fun EducationalContentScreen(
         }
     }
 
-    Scaffold(
-        topBar = {
-            TopAppBar(
-                title = {
-                    Text("Conteúdos educativos")
-                },
-                navigationIcon = {
-                    TextButton(onClick = onBackClick) {
-                        Text("Voltar")
-                    }
-                }
-            )
+    Column(
+        modifier = Modifier
+            .fillMaxSize()
+            .padding(16.dp)
+    ) {
+
+        TextButton(
+            onClick = onBackClick,
+            contentPadding = PaddingValues(0.dp)
+        ) {
+            Text("← Voltar")
         }
-    ) { paddingValues ->
+
+        Spacer(modifier = Modifier.height(8.dp))
+
+        Text(
+            text = "Conteúdos educativos",
+            style = MaterialTheme.typography.headlineMedium
+        )
+
+        Spacer(modifier = Modifier.height(16.dp))
 
         when {
 
             isLoading -> {
+
                 Box(
-                    modifier = Modifier
-                        .fillMaxSize()
-                        .padding(paddingValues),
+                    modifier = Modifier.fillMaxSize(),
                     contentAlignment = Alignment.Center
                 ) {
                     CircularProgressIndicator()
@@ -71,10 +76,9 @@ fun EducationalContentScreen(
             }
 
             errorMessage != null -> {
+
                 Box(
-                    modifier = Modifier
-                        .fillMaxSize()
-                        .padding(paddingValues),
+                    modifier = Modifier.fillMaxSize(),
                     contentAlignment = Alignment.Center
                 ) {
                     Text(errorMessage!!)
@@ -82,11 +86,9 @@ fun EducationalContentScreen(
             }
 
             else -> {
+
                 LazyColumn(
-                    modifier = Modifier
-                        .fillMaxSize()
-                        .padding(paddingValues),
-                    contentPadding = PaddingValues(16.dp),
+                    modifier = Modifier.fillMaxSize(),
                     verticalArrangement = Arrangement.spacedBy(12.dp)
                 ) {
 
@@ -95,6 +97,7 @@ fun EducationalContentScreen(
                         Card(
                             modifier = Modifier.fillMaxWidth()
                         ) {
+
                             Column(
                                 modifier = Modifier.padding(16.dp)
                             ) {
@@ -104,9 +107,7 @@ fun EducationalContentScreen(
                                     style = MaterialTheme.typography.titleMedium
                                 )
 
-                                Spacer(
-                                    modifier = Modifier.height(8.dp)
-                                )
+                                Spacer(modifier = Modifier.height(8.dp))
 
                                 Text(
                                     text = post.body,

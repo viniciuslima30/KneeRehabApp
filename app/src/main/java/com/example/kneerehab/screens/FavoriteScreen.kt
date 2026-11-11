@@ -7,12 +7,11 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
-
 import com.example.kneerehab.data.database.FavoriteDao
 
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun FavoritesScreen(
     favoriteDao: FavoriteDao,
@@ -24,28 +23,33 @@ fun FavoritesScreen(
         .getAllFavorites()
         .collectAsState(initial = emptyList())
 
-    Scaffold(
-        topBar = {
-            TopAppBar(
-                title = {
-                    Text("Meus Favoritos")
-                },
-                navigationIcon = {
-                    TextButton(onClick = onBackClick) {
-                        Text("Voltar")
-                    }
-                }
-            )
+    Column(
+        modifier = Modifier
+            .fillMaxSize()
+            .padding(16.dp)
+    ) {
+
+        TextButton(
+            onClick = onBackClick,
+            contentPadding = PaddingValues(0.dp)
+        ) {
+            Text("← Voltar")
         }
-    ) { padding ->
+
+        Spacer(modifier = Modifier.height(8.dp))
+
+        Text(
+            text = "Meus Favoritos",
+            style = MaterialTheme.typography.headlineMedium
+        )
+
+        Spacer(modifier = Modifier.height(16.dp))
 
         if (favorites.isEmpty()) {
 
             Box(
-                modifier = Modifier
-                    .fillMaxSize()
-                    .padding(padding),
-                contentAlignment = androidx.compose.ui.Alignment.Center
+                modifier = Modifier.fillMaxSize(),
+                contentAlignment = Alignment.Center
             ) {
                 Text("Você ainda não possui favoritos.")
             }
@@ -53,10 +57,7 @@ fun FavoritesScreen(
         } else {
 
             LazyColumn(
-                modifier = Modifier
-                    .fillMaxSize()
-                    .padding(padding),
-                contentPadding = PaddingValues(16.dp),
+                modifier = Modifier.fillMaxSize(),
                 verticalArrangement = Arrangement.spacedBy(8.dp)
             ) {
 

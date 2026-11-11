@@ -9,36 +9,37 @@ import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
-
 import com.example.kneerehab.data.injuries
 
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun InjuriesScreen(
     onInjuryClick: (Int) -> Unit,
     onBackClick: () -> Unit
 ) {
 
-    Scaffold(
-        topBar = {
-            TopAppBar(
-                title = {
-                    Text("Lesões do joelho")
-                },
-                navigationIcon = {
-                    TextButton(onClick = onBackClick) {
-                        Text("Voltar")
-                    }
-                }
-            )
+    Column(
+        modifier = Modifier
+            .fillMaxSize()
+            .padding(16.dp)
+    ) {
+
+        TextButton(
+            onClick = onBackClick,
+            contentPadding = PaddingValues(0.dp)
+        ) {
+            Text("← Voltar")
         }
-    ) { paddingValues ->
+
+        Spacer(modifier = Modifier.height(8.dp))
+
+        Text(
+            text = "Lesões do joelho",
+            style = MaterialTheme.typography.headlineMedium
+        )
+
+        Spacer(modifier = Modifier.height(16.dp))
 
         LazyColumn(
-            modifier = Modifier
-                .fillMaxSize()
-                .padding(paddingValues)
-                .padding(16.dp),
             verticalArrangement = Arrangement.spacedBy(12.dp)
         ) {
 
