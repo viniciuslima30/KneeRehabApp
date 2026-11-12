@@ -1,6 +1,8 @@
 
 package com.example.kneerehab.screens
 
+import android.content.Intent
+import android.net.Uri
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
@@ -8,8 +10,9 @@ import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
-import com.example.kneerehab.data.api.Post
+import com.example.kneerehab.data.api.NewsArticle
 import com.example.kneerehab.data.api.RetrofitClient
 
 @Composable
@@ -17,8 +20,10 @@ fun EducationalContentScreen(
     onBackClick: () -> Unit
 ) {
 
-    var posts by remember {
-        mutableStateOf<List<Post>>(emptyList())
+    val context = LocalContext.current
+
+    var news by remember {
+        mutableStateOf<List<NewsArticle>>(emptyList())
     }
 
     var isLoading by remember {
@@ -29,13 +34,17 @@ fun EducationalContentScreen(
         mutableStateOf<String?>(null)
     }
 
-    // Faz a requisição quando a tela é aberta
     LaunchedEffect(Unit) {
-
         try {
-            posts = RetrofitClient.api.getPosts()
+            val response = RetrofitClient.api.getNews(
+                query = "\"joelho\" OR \"tendinopatia patelar\" OR \"ligamento cruzado\"",
+                apiKey = RetrofitClient.API_KEY
+            )
+
+            news = response.articles
+
         } catch (e: Exception) {
-            errorMessage = "Não foi possível carregar os conteúdos."
+            errorMessage = "Não foi possível carregar as notícias."
         } finally {
             isLoading = false
         }
@@ -57,7 +66,7 @@ fun EducationalContentScreen(
         Spacer(modifier = Modifier.height(8.dp))
 
         Text(
-            text = "Conteúdos educativos",
+            text = "Notícias sobre joelho",
             style = MaterialTheme.typography.headlineMedium
         )
 
@@ -66,7 +75,6 @@ fun EducationalContentScreen(
         when {
 
             isLoading -> {
-
                 Box(
                     modifier = Modifier.fillMaxSize(),
                     contentAlignment = Alignment.Center
@@ -76,7 +84,6 @@ fun EducationalContentScreen(
             }
 
             errorMessage != null -> {
-
                 Box(
                     modifier = Modifier.fillMaxSize(),
                     contentAlignment = Alignment.Center
@@ -85,34 +92,61 @@ fun EducationalContentScreen(
                 }
             }
 
-            else -> {
+            news.isEmpty() -> {
+                Text("Nenhuma notícia encontrada.")
+            }
 
+            else -> {
                 LazyColumn(
-                    modifier = Modifier.fillMaxSize(),
                     verticalArrangement = Arrangement.spacedBy(12.dp)
                 ) {
-
-                    items(posts) { post ->
+                    items(news) { article ->
 
                         Card(
                             modifier = Modifier.fillMaxWidth()
                         ) {
-
                             Column(
                                 modifier = Modifier.padding(16.dp)
                             ) {
 
                                 Text(
-                                    text = post.title,
+                                    text = article.title,
                                     style = MaterialTheme.typography.titleMedium
                                 )
 
                                 Spacer(modifier = Modifier.height(8.dp))
 
                                 Text(
-                                    text = post.body,
-                                    style = MaterialTheme.typography.bodyMedium
+                                    text = article.description
+                                        ?: "Descrição indisponível."
                                 )
+
+                                Spacer(modifier = Modifier.height(8.dp))
+
+                                Text(
+                                    text = "Fonte: ${article.source.name}",
+                                    style = MaterialTheme.typography.bodySmall
+                                )
+
+                                Text(
+                                    text = "Publicado em: ${article.publishedAt.take(10)}",
+                                    style = MaterialTheme.typography.bodySmall
+                                )
+
+                                Spacer(modifier = Modifier.height(12.dp))
+
+                                Button(
+                                    onClick = {
+                                        val intent = Intent(
+                                            Intent.ACTION_VIEW,
+                                            Uri.parse(article.url)
+                                        )
+                                        context.startActivity(intent)
+                                    },
+                                    modifier = Modifier.fillMaxWidth()
+                                ) {
+                                    Text("Ler notícia completa")
+                                }
                             }
                         }
                     }

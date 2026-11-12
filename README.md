@@ -1,126 +1,100 @@
-# 🦵 KneeRehab
+# KneeRehab 🦵
 
-Aplicativo Android desenvolvido em Kotlin com Jetpack Compose, com o objetivo de apresentar informações educativas sobre lesões do joelho e exercícios relacionados à reabilitação.
-
-O projeto foi desenvolvido como atividade acadêmica, explorando recursos de desenvolvimento Android, persistência de dados e integração com APIs REST.
+Aplicativo Android desenvolvido como projeto acadêmico utilizando Kotlin e Jetpack Compose. O objetivo é apresentar informações educativas sobre lesões do joelho, exercícios relacionados e notícias reais sobre saúde e reabilitação.
 
 ## 📱 Funcionalidades
 
-- **Tela inicial:** apresentação do aplicativo e acesso às funcionalidades.
-- **Catálogo de lesões:** informações sobre quatro lesões comuns do joelho.
-- **Detalhes das lesões:** descrição e informações relacionadas a cada condição.
-- **Exercícios:** catálogo com 16 exercícios, sendo quatro relacionados a cada lesão.
-- **Vídeos demonstrativos:** acesso a pesquisas de demonstrações dos exercícios no YouTube.
+- **Tela inicial:** acesso às funcionalidades do aplicativo.
+- **Catálogo de lesões:** informações sobre quatro lesões do joelho:
+    - Tendinopatia patelar;
+    - Condromalácia patelar;
+    - Lesão do ligamento cruzado anterior (LCA);
+    - Lesão de menisco.
+- **Detalhes das lesões:** descrição e sintomas comuns.
+- **Exercícios:** catálogo com 16 exercícios educativos, quatro relacionados a cada lesão.
+- **Vídeos demonstrativos:** links para pesquisas de demonstrações dos exercícios no YouTube.
 - **Favoritos:** possibilidade de salvar e remover lesões favoritas.
-- **Conteúdos educativos:** consumo de uma API REST externa para exibição de conteúdos.
-- **Preferências:** armazenamento da configuração de recebimento de lembretes.
-- **Notificações:** agendamento e exibição de lembretes locais.
-
-## 🩺 Lesões disponíveis
-
-O aplicativo apresenta informações sobre:
-
-1. Tendinopatia patelar.
-2. Condromalácia patelar.
-3. Lesão do ligamento cruzado anterior (LCA).
-4. Lesão de menisco.
+- **Notícias:** integração com a GNews API para consultar notícias reais sobre joelho e reabilitação.
+- **Preferências:** opção para ativar ou desativar lembretes.
+- **Notificações:** envio de notificações locais utilizando WorkManager.
 
 ## 🛠️ Tecnologias utilizadas
 
-| Tecnologia | Aplicação |
-|---|---|
-| Kotlin | Linguagem de programação |
-| Jetpack Compose | Construção das interfaces |
-| Navigation Compose | Navegação entre telas |
-| Room / SQLite | Persistência dos favoritos |
-| DataStore | Armazenamento de preferências |
-| Retrofit | Consumo de API REST |
-| Gson | Conversão de dados JSON |
-| WorkManager | Agendamento de notificações |
-| Git / GitHub | Versionamento do projeto |
+- Kotlin
+- Jetpack Compose
+- Android Studio
+- Navigation Compose
+- Room / SQLite
+- DataStore Preferences
+- Retrofit
+- Gson
+- GNews API
+- WorkManager
 
-## 🌐 API REST
-
-O aplicativo utiliza a API pública JSONPlaceholder para demonstrar a comunicação com um serviço externo.
-
-A integração é realizada utilizando Retrofit e Gson, permitindo buscar conteúdos em formato JSON e exibi-los na tela de conteúdos educativos.
-
-API utilizada: https://jsonplaceholder.typicode.com/
-
-## 📂 Organização do projeto
+## 🗂️ Organização do projeto
 
 ```text
-com.example.kneerehab/
-│
-├── MainActivity.kt
-│
-├── navigation/
-│   └── AppNavigation.kt
-│
-├── screens/
-│   ├── HomeScreen.kt
-│   ├── InjuriesScreen.kt
-│   ├── InjuryDetailScreen.kt
-│   ├── ExercisesScreen.kt
-│   ├── FavoritesScreen.kt
-│   └── EducationalContentScreen.kt
-│
-├── data/
-│   ├── Injury.kt
-│   ├── Exercise.kt
-│   ├── UserPreferences.kt
-│   │
-│   ├── api/
-│   │   ├── Post.kt
-│   │   ├── ApiService.kt
-│   │   └── RetrofitClient.kt
-│   │
-│   ├── database/
-│   │   ├── Favorite.kt
-│   │   ├── FavoriteDao.kt
-│   │   └── AppDatabase.kt
-│   │
-│   └── notifications/
-│       ├── ReminderWorker.kt
-│       └── ReminderScheduler.kt
-│
-└── ui/
-    └── theme/
+KneeRehab/
+└── app/
+    └── src/main/java/com/example/kneerehab/
+        ├── MainActivity.kt
+        ├── navigation/
+        │   └── AppNavigation.kt
+        ├── screens/
+        │   ├── HomeScreen.kt
+        │   ├── InjuriesScreen.kt
+        │   ├── InjuryDetailScreen.kt
+        │   ├── ExercisesScreen.kt
+        │   ├── FavoritesScreen.kt
+        │   └── EducationalContentScreen.kt
+        └── data/
+            ├── Injury.kt
+            ├── Exercise.kt
+            ├── UserPreferences.kt
+            ├── api/
+            ├── database/
+            └── notifications/
 ```
 
-## ▶️ Como executar o projeto
+## 🌐 API de notícias
 
-1. Clone o repositório:
+O aplicativo utiliza a GNews API para buscar notícias relacionadas a joelho, tendinopatia patelar e lesões ligamentares.
 
-```bash
-git clone https://github.com/viniciuslima30/KneeRehabApp
-```
+A integração é realizada com Retrofit, que faz as requisições HTTP e converte as respostas JSON em objetos Kotlin.
 
+Documentação: https://gnews.io/docs/v4
+
+## 💾 Armazenamento de dados
+
+- **Room / SQLite:** armazenamento local das lesões favoritas.
+- **DataStore:** armazenamento da preferência de recebimento de lembretes.
+
+## 🔔 Notificações
+
+O WorkManager é utilizado para agendar notificações locais no dispositivo. O usuário pode ativar ou desativar os lembretes pela tela inicial.
+
+## ▶️ Como executar
+
+1. Clone o repositório.
 2. Abra o projeto no Android Studio.
+3. Aguarde a sincronização do Gradle.
+4. Configure sua chave da GNews API em `RetrofitClient.kt`.
+5. Execute o aplicativo em um emulador ou dispositivo Android.
 
-3. Aguarde a sincronização das dependências do Gradle.
+### Configuração da API Key
 
-4. Execute o aplicativo em um emulador ou dispositivo Android.
+No arquivo `RetrofitClient.kt`, substitua o valor de `API_KEY` pela sua chave:
 
-5. Permita o acesso às notificações quando solicitado, caso queira testar os lembretes.
+```kotlin
+const val API_KEY = "SUA_API_KEY"
+```
 
-**Requisitos:**
-- Android Studio.
-- JDK compatível com a configuração do projeto.
-- Dispositivo ou emulador Android.
-- Conexão com a internet para consumir a API e acessar o YouTube.
+**Importante:** não publique sua chave de API em repositórios públicos. Para uma aplicação de produção, utilize um backend para proteger essa credencial.
 
-## 🚀 Possibilidades de evolução
+## ⚠️ Aviso
 
-- Integração com APIs especializadas em saúde e ortopedia.
-- Inclusão de novos exercícios e lesões.
-- Adição de conteúdos educativos atualizados.
-- Melhorias na interface e experiência do usuário.
-
-## ⚠️ Aviso importante
-
-O KneeRehab possui finalidade exclusivamente educativa. As informações e os exercícios apresentados não substituem avaliação, diagnóstico ou orientação de profissionais de saúde.
+O KneeRehab possui finalidade exclusivamente educativa. As informações e os exercícios apresentados não substituem avaliação, diagnóstico ou orientação de um profissional de saúde.
 
 ## 👨‍💻 Autor
 
-Desenvolvido como projeto acadêmico utilizando Kotlin e Jetpack Compose por Vinícius Lima Carneiro.
+Desenvolvido como projeto acadêmico em Kotlin e Android Studio.
